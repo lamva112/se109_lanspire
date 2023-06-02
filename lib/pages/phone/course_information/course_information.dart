@@ -1,0 +1,1 @@
+export 'course_information_page.dart';
