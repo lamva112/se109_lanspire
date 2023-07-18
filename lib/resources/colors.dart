@@ -16,4 +16,5 @@ class AppColors {
   static const Color primaryTrueBlue = Color(0xFF096DD9);
   static const Color primaryGay = Color(0xFF727F8E);
   static const Color primaryLotion = Color(0xFFFAFAFA);
+  static const Color primaryInternationalOrange = Color(0xFFFF4D00);
 }

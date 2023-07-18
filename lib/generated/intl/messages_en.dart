@@ -38,6 +38,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Confirm password"),
         "confirm_password_is_not_valid": MessageLookupByLibrary.simpleMessage(
             "confirm password is not valid"),
+        "core": MessageLookupByLibrary.simpleMessage("Core"),
         "course": MessageLookupByLibrary.simpleMessage("Course"),
         "course_information":
             MessageLookupByLibrary.simpleMessage("Course information"),
@@ -45,10 +46,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "course_type": MessageLookupByLibrary.simpleMessage("Course type"),
         "description": MessageLookupByLibrary.simpleMessage("Description:"),
         "end_date": MessageLookupByLibrary.simpleMessage("End date"),
+        "exam": MessageLookupByLibrary.simpleMessage("Exam"),
+        "exam_name": MessageLookupByLibrary.simpleMessage("Exam name"),
+        "exam_schedule": MessageLookupByLibrary.simpleMessage("Exam schedule"),
         "fee": MessageLookupByLibrary.simpleMessage("Fee:"),
         "finish": MessageLookupByLibrary.simpleMessage("Finished"),
         "forgot_password":
             MessageLookupByLibrary.simpleMessage("Forgot password?"),
+        "grade": MessageLookupByLibrary.simpleMessage("Grade"),
         "hello_world": MessageLookupByLibrary.simpleMessage("Hello World"),
         "in_process": MessageLookupByLibrary.simpleMessage("In Process"),
         "information": MessageLookupByLibrary.simpleMessage("Informations"),
@@ -65,6 +70,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(
                 "password must be at least 8 charactor"),
         "personal": MessageLookupByLibrary.simpleMessage("personal"),
+        "personal_information":
+            MessageLookupByLibrary.simpleMessage("personal information"),
         "point": MessageLookupByLibrary.simpleMessage("Point:"),
         "reset_password":
             MessageLookupByLibrary.simpleMessage("Reset password"),
@@ -72,7 +79,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "sign_in": MessageLookupByLibrary.simpleMessage("Sign In"),
         "start_date": MessageLookupByLibrary.simpleMessage("Start date"),
         "student": MessageLookupByLibrary.simpleMessage("Student"),
+        "time_table": MessageLookupByLibrary.simpleMessage("Time table"),
         "type_name": MessageLookupByLibrary.simpleMessage("Type name:"),
+        "update": MessageLookupByLibrary.simpleMessage("Update"),
         "user_name": MessageLookupByLibrary.simpleMessage("Username"),
         "user_name_is_not_valid":
             MessageLookupByLibrary.simpleMessage("user name is not valid"),

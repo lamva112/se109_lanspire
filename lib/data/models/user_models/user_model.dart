@@ -1,77 +1,94 @@
+import 'package:se109_lanspire/data/models/user_models/roles_model.dart';
+
 import '../../../extensions/extensions.dart';
 
 import '../../../enums.dart';
 import '../../data.dart';
 
 class UserModel {
-  SettingModel? setting;
-  String? id;
+  String? idUser;
+  String? username;
+  String? password;
+  String? displayName;
   String? email;
+  int? gender;
   String? phoneNumber;
-  String? name;
-  ImageModel? image;
-  int? points;
-  String? birthDay;
-  Gender? gender;
+  String? imageUrl;
+  List<String>? address;
+  String? dob;
+  String? idRole;
+  bool? isActivated;
+  Role? role;
 
-  UserModel({
-    this.setting,
-    this.id,
-    this.email,
-    this.phoneNumber,
-    this.name,
-    this.image,
-    this.points,
-    this.birthDay,
-    this.gender,
-  });
+
+  UserModel(
+      {this.idUser,
+        this.username,
+        this.password,
+        this.displayName,
+        this.email,
+        this.gender,
+        this.phoneNumber,
+        this.imageUrl,
+        this.address,
+        this.dob,
+        this.idRole,
+        this.isActivated,
+        this.role});
 
   UserModel.fromJson(Map<String, dynamic> json) {
-    setting = json['setting'] != null ? SettingModel.fromJson(Map.from(json['setting'])) : null;
-    id = json['id'];
-    name = json['name'];
+    idUser = json['idUser'];
+    username = json['username'];
+    password = json['password'];
+    displayName = json['displayName'];
     email = json['email'];
+    gender = json['gender'];
     phoneNumber = json['phoneNumber'];
-    image = json['image'] != null ? ImageModel.fromJson(Map.from(json['image'])) : null;
-    birthDay = json['birthDay'];
-    if(json['gender'] != null && json['gender'] is String){
-      String convertValue = json['gender'];
-      gender = convertValue.convertToGenderEnum();
+    imageUrl = json['imageUrl'];
+    address = json['address'].cast<String>();
+    if(json['dob'] != null && json['dob'] is String){
+      String convertValue = json['dob'];
+      dob = convertValue.covertToAppDateTime();
     }
+    idRole = json['idRole'];
+    isActivated = json['isActivated'];
+    role = json['Role'] != null ?  Role.fromJson(json['Role']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    Map<String, dynamic> data = {};
-    if (setting != null) {
-      data['setting'] = setting!.toJson();
+    final Map<String, dynamic> data =  Map<String, dynamic>();
+    data['idUser'] = this.idUser;
+    data['username'] = this.username;
+    data['password'] = this.password;
+    data['displayName'] = this.displayName;
+    data['email'] = this.email;
+    data['gender'] = this.gender;
+    data['phoneNumber'] = this.phoneNumber;
+    data['imageUrl'] = this.imageUrl;
+    data['address'] = this.address;
+    data['dob'] = this.dob;
+    data['idRole'] = this.idRole;
+    data['isActivated'] = this.isActivated;
+    if (this.role != null) {
+      data['Role'] = this.role!.toJson();
     }
-    data['id'] = id;
-    data['name'] = name;
-    data['email'] = email;
-    data['phoneNumber'] = phoneNumber;
-    if (image != null) {
-      data['image'] = image!.toJson();
-    }
-    data['birthDay'] = birthDay;
-    data['gender'] = gender;
     return data;
   }
 
-  UserModel copyWith({
-    SettingModel? setting,
-    String? id,
-    String? email,
-    String? phoneNumber,
-    String? name,
-    ImageModel? image,
-  }) {
+  UserModel copyWith({String? phoneNumber,String? dob,String? email,List<String>? address}){
     return UserModel(
-      setting: setting ?? this.setting,
-      id: id ?? this.id,
-      email: email ?? this.email,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      name: name ?? this.name,
-      image: image ?? this.image,
+      idUser:this.idUser,
+      username: this.username,
+      password: this.password,
+      displayName: this.displayName,
+      email: email??this.email,
+      gender: this.gender,
+      phoneNumber: phoneNumber??this.phoneNumber,
+      imageUrl: this.imageUrl,
+      address: address ??this.address,
+      dob: dob ??this.dob,
+      isActivated: this.isActivated,
+      idRole: this.idRole,
     );
   }
 }

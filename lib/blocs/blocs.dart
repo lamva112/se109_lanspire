@@ -7,3 +7,6 @@ export 'home/home.dart';
 export 'course/course.dart';
 export 'course_information/course_information.dart';
 export 'exam_shedule/exam_schedule.dart';
+export 'user_information/user_information.dart';
+export 'time_table/time_table.dart';
+export 'mark_sheet/mark_sheet.dart';

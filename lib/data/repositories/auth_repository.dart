@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:se109_lanspire/data/responses/user_info_response.dart';
 
 import '../../constants.dart';
 import '../../core/core.dart';
@@ -40,6 +41,7 @@ class AuthRepository implements IAuthRepository {
     } on ServerException {
       return Left(ServerFailure());
     } catch (e) {
+      print("respository ${e}");
       return Left(UnknownFailure());
     }
   }
@@ -281,4 +283,22 @@ class AuthRepository implements IAuthRepository {
 
   @override
   AuthResponse get firebaseCurrentUser => authRemoteService.firebaseCurrentUser;
+
+  @override
+  Future<Either<Failure, UserInfoResponse?>> signInWithEmailAndPassword({required String email, required String password}) async {
+    final isConnected = await networkInfo.isConnected;
+    try {
+      if (isConnected) {
+        var res = await authRemoteService.signInWithEmail(email: email, password: password);
+        print("respository ${res}");
+        return Right(res);
+      }
+      return Right(null);
+    } on ServerException {
+      return Left(ServerFailure());
+    } catch (e) {
+      print("respository loi ${e}");
+      return Left(UnknownFailure());
+    }
+  }
 }

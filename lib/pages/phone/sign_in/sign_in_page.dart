@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:se109_lanspire/blocs/auth/auth.dart';
 import 'package:se109_lanspire/core/base/base.dart';
+import 'package:se109_lanspire/data/responses/user_info_response.dart';
 import 'package:se109_lanspire/gen/assets.gen.dart';
 import 'package:se109_lanspire/resources/resources.dart';
 import 'package:se109_lanspire/widgets/ink_well_wrapper.dart';
+import 'package:se109_lanspire/widgets/loading_overlay_widget.dart';
 
+import '../../../data/data.dart';
 import '../../../router/router.dart';
+import '../../../utils/dialog_utils.dart';
+import '../../../utils/utils.dart';
 import '../../../widgets/custom_textfield/custom_textfield.dart';
 
 class SignInPage extends StatefulWidget {
@@ -24,6 +29,26 @@ class _SignInPageState extends BaseState<SignInPage, AuthBloc> {
   var buttonStatus = BehaviorSubject.seeded(false);
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    PermissionHelper().requestPermissions();
+    bloc.errorStream.listen((event) {
+      if (event != null) {
+        showAppDialog(
+          context: context,
+          errMsg: event,
+          title: event,
+          onConfirm: () {
+            Navigator.pop(context);
+          },
+        );
+      }
+    });
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -37,159 +62,184 @@ class _SignInPageState extends BaseState<SignInPage, AuthBloc> {
             ),
           )),
           SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 52, bottom: 15),
-                  child: Assets.images.png.logo.image(fit: BoxFit.cover),
-                ),
-                Text(
-                  localization.well_come_to_lanspire,
-                  style: TextStyle(
-                    color: AppColors.primaryWhite,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 16, right: 16, top: 19),
-                  margin: EdgeInsets.only(left: 27, right: 27, top: 54),
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryWhite,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+            child: StreamBuilder<bool?>(
+              stream: bloc.loadingStream,
+              builder: (context, snapshot) {
+                return LoadingOverLayWidget(
+                  isLoading: snapshot.data??false,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              color: AppColors.primaryRed,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                          Text(
-                            localization.user_name,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
-                              color: AppColors.primaryBlack,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.only(top: 52, bottom: 15),
+                        child: Assets.images.png.logo.image(fit: BoxFit.cover),
                       ),
-                      CustomTextField(
-                        onChanged: (value) {
-                          buttonStatus.add(value.isNotEmpty && passwordController.text.length > 7);
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return localization.user_name_is_not_valid;
-                          }
-                          return null;
-                        },
-                        textFieldType: TextFieldType.text,
-                        decorationConfig: textFieldDecorationConfig(
-                          prefixIcon: Assets.images.png.user.image(),
-                          controller: userNameController,
-                          hint: localization.user_name,
-                        ),
-                        textFieldConfig:
-                            textFieldConfig(controller: userNameController),
-                      ),
-                      SizedBox(
-                        height: 14,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '*',
-                            style: TextStyle(
-                              color: AppColors.primaryRed,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                          Text(
-                            localization.password,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
-                              color: AppColors.primaryBlack,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                        ],
-                      ),
-                      CustomTextField(
-                        onChanged: (value) {
-                          buttonStatus.add(value.length > 8 && userNameController.text.isNotEmpty);
-                        },
-                        validator: (value) {
-                          if (value!.length < 8) {
-                            return localization.password_must_be_at_least_8_charactor;
-                          }
-                          return null;
-                        },
-                        textFieldType: TextFieldType.password,
-                        decorationConfig: textFieldDecorationConfig(
-                          prefixIcon: Assets.images.png.user.image(),
-                          controller: passwordController,
-                          hint: localization.password,
-                        ),
-                        textFieldConfig: textFieldConfig(
-                          controller: passwordController,
+                      Text(
+                        localization.well_come_to_lanspire,
+                        style: TextStyle(
+                          color: AppColors.primaryWhite,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                          fontFamily: 'Poppins',
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: InkWellWrapper(
-                          borderRadius: BorderRadius.circular(16),
-                          onTap: () {
-                            Navigator.of(context)
-                                .pushNamed(Routes.forgetPassword);
-                          },
-                          paddingChild: EdgeInsets.all(4),
-                          child: Text(
-                            localization.forgot_password,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
-                              color: AppColors.primaryBlueBall,
-                              fontFamily: 'Poppins',
-                            ),
-                            textAlign: TextAlign.end,
-                          ),
+                      Container(
+                        padding: EdgeInsets.only(left: 16, right: 16, top: 19),
+                        margin: EdgeInsets.only(left: 27, right: 27, top: 54),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryWhite,
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      ),
-                      InkWellWrapper(
-                        onTap: buttonStatus.value?() {
-                          Navigator.pushNamed(context, Routes.home);
-                        }:null,
-                        margin: EdgeInsets.only(top: 25, bottom: 46),
-                        borderRadius: BorderRadius.circular(10),
-                        color: buttonStatus.value
-                            ? AppColors.primaryBlueBerry
-                            : AppColors.primaryBlueBerry.withOpacity(0.5),
-                        paddingChild: EdgeInsets.symmetric(vertical: 14),
-                        width: MediaQuery.of(context).size.width,
-                        child: Text(
-                          localization.sign_in,
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.primaryWhite),
-                          textAlign: TextAlign.center,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  '*',
+                                  style: TextStyle(
+                                    color: AppColors.primaryRed,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                                Text(
+                                  localization.user_name,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,
+                                    color: AppColors.primaryBlack,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            CustomTextField(
+                              onChanged: (value) {
+                                buttonStatus.add(value.isNotEmpty && passwordController.text.length > 7);
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return localization.user_name_is_not_valid;
+                                }
+                                return null;
+                              },
+                              textFieldType: TextFieldType.text,
+                              decorationConfig: textFieldDecorationConfig(
+                                prefixIcon: Assets.images.png.user.image(),
+                                controller: userNameController,
+                                hint: localization.user_name,
+                              ),
+                              textFieldConfig:
+                                  textFieldConfig(controller: userNameController),
+                            ),
+                            SizedBox(
+                              height: 14,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '*',
+                                  style: TextStyle(
+                                    color: AppColors.primaryRed,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                                Text(
+                                  localization.password,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,
+                                    color: AppColors.primaryBlack,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            ),
+                            CustomTextField(
+                              onChanged: (value) {
+                                buttonStatus.add(value.length > 8 && userNameController.text.isNotEmpty);
+                              },
+                              validator: (value) {
+                                if (value!.length < 8) {
+                                  return localization.password_must_be_at_least_8_charactor;
+                                }
+                                return null;
+                              },
+                              textFieldType: TextFieldType.password,
+                              decorationConfig: textFieldDecorationConfig(
+                                prefixIcon: Assets.images.png.user.image(),
+                                controller: passwordController,
+                                hint: localization.password,
+                              ),
+                              textFieldConfig: textFieldConfig(
+                                controller: passwordController,
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: InkWellWrapper(
+                                borderRadius: BorderRadius.circular(16),
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pushNamed(Routes.forgetPassword);
+                                },
+                                paddingChild: EdgeInsets.all(4),
+                                child: Text(
+                                  localization.forgot_password,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.normal,
+                                    color: AppColors.primaryBlueBall,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                            ),
+                            StreamBuilder<UserInfoResponse?>(
+                              stream: bloc.userInforStream,
+                              builder: (context, snapshot) {
+                                if(snapshot.hasData){
+                                  if(snapshot.data?.accessToken != null){
+                                    var token = snapshot.data?.user?.idUser;
+                                    bloc.saveToken(token!).then((value) {
+                                      Navigator.pushNamed(context, Routes.home,arguments: snapshot.data?.user);
+                                    }).catchError((e){
+                                      print(e);
+                                    });
+                                  }
+                                }else{
+                                  print("ko co data");
+                                }
+                                return InkWellWrapper(
+                                  onTap: true?() {
+                                    bloc.signInWithEmailAndPassword(email: userNameController.text.trim(), password: passwordController.text.trim());
+                                  }:null,
+                                  margin: EdgeInsets.only(top: 25, bottom: 46),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: buttonStatus.value
+                                      ? AppColors.primaryBlueBerry
+                                      : AppColors.primaryBlueBerry.withOpacity(0.5),
+                                  paddingChild: EdgeInsets.symmetric(vertical: 14),
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Text(
+                                    localization.sign_in,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.primaryWhite),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                );
+                              }
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                );
+              }
             ),
           )
         ],

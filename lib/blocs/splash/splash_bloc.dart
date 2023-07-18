@@ -14,7 +14,7 @@ class SplashBloc extends BaseBloc<SplashState> {
 
   Future<void> loadData() async {
     emitLoading(true);
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
     emit(
       SplashState(state: state, success: true),
     );
@@ -28,20 +28,20 @@ class SplashBloc extends BaseBloc<SplashState> {
     //   // TODO: handle data here
     // });
 
-    await Future.delayed(Duration(seconds: 3));
-
-    emitWaiting(true);
-    await Future.delayed(Duration(seconds: 2));
-    emit(
-      SplashState(state: state, error: 'This is base'),
-    );
-    emitWaiting(false);
-
-    print("Next error event is coming");
-    await Future.delayed(Duration(seconds: 2));
-    emit(
-      SplashState(state: state, error: 'This is base'),
-    );
+    // await Future.delayed(Duration(seconds: 3));
+    //
+    // emitWaiting(true);
+    // await Future.delayed(Duration(seconds: 2));
+    // emit(
+    //   SplashState(state: state, error: 'This is base'),
+    // );
+    // emitWaiting(false);
+    //
+    // print("Next error event is coming");
+    // await Future.delayed(Duration(seconds: 2));
+    // emit(
+    //   SplashState(state: state, error: 'This is base'),
+    // );
   }
 
   @override

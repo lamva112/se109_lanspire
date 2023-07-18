@@ -40,3 +40,13 @@ enum ImageType { network, file }
 enum Gender { male, female, other }
 
 enum AuthType { apple, facebook, google, phone }
+
+enum DialogType {
+  error,
+  warning,
+  success,
+  singleBtn,
+  doubleBtn,
+  report,
+  logout,
+}

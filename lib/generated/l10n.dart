@@ -481,6 +481,86 @@ class S {
       args: [],
     );
   }
+
+  /// `personal information`
+  String get personal_information {
+    return Intl.message(
+      'personal information',
+      name: 'personal_information',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exam schedule`
+  String get exam_schedule {
+    return Intl.message(
+      'Exam schedule',
+      name: 'exam_schedule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update`
+  String get update {
+    return Intl.message(
+      'Update',
+      name: 'update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time table`
+  String get time_table {
+    return Intl.message(
+      'Time table',
+      name: 'time_table',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grade`
+  String get grade {
+    return Intl.message(
+      'Grade',
+      name: 'grade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exam name`
+  String get exam_name {
+    return Intl.message(
+      'Exam name',
+      name: 'exam_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Core`
+  String get core {
+    return Intl.message(
+      'Core',
+      name: 'core',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exam`
+  String get exam {
+    return Intl.message(
+      'Exam',
+      name: 'exam',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

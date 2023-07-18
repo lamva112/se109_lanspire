@@ -14,3 +14,7 @@ const List<String> fbPermissions = [
   'openid',
 ];
 const String fbFields = 'id,name,first_name,last_name,email,middle_name,name_format,picture.width(800).height(800),short_name';
+
+final kToday = DateTime.now();
+final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
+final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);

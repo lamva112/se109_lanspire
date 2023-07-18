@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:se109_lanspire/data/models/course_model.dart';
+import 'package:se109_lanspire/data/responses/class_detail_response.dart';
 import '../../../blocs/blocs.dart';
 import '../../../core/base/base.dart';
 import '../../../resources/colors.dart';
@@ -16,6 +18,7 @@ class CourseInformationPage extends StatefulWidget {
 
 class _CourseInformationPageState extends BaseState<CourseInformationPage, CourseInformationBloc> with TickerProviderStateMixin {
   late TabController _tabController;
+  String classId = '';
   List<String> classTime = [
     "14:00 - 17:00 | Tue",
     "14:00 - 17:00 | Tue",
@@ -23,12 +26,37 @@ class _CourseInformationPageState extends BaseState<CourseInformationPage, Cours
     "14:00 - 17:00 | Tue",
   ];
 
-  List<String> lectureList = ["Tran Van A", "Tran Van A", "Tran Van A", "Tran Van A"];
+  List<String> lectureList = ["Nguyen Ngoc Hoang Minh", "Nguyen Quang Sang", "Tran Van Minh", "Duong Van Qua"];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void initData() {
+    getData();
+    print("classID ${classId}");
+    bloc.getClassDetailData(classId: classId);
+    super.initData();
+  }
+
+  void getData() {
+    try {
+      var data = ModalRoute.of(context)?.settings.arguments as String;
+
+      classId = data;
+    } catch (e) {
+      print('Get class error ::: $e');
+    }
+  }
+
+  String formatText(String text) {
+    final regex = RegExp(r'^(\d{4})(\d{4})(\d{4})(\d{4})$');
+    return text.replaceAllMapped(regex, (match) {
+      return '${match[1]} - ${match[2]} - ${match[3]} - ${match[4]}';
+    });
   }
 
   @override
@@ -41,7 +69,10 @@ class _CourseInformationPageState extends BaseState<CourseInformationPage, Cours
         //automaticallyImplyLeading: false,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new,color: AppColors.primaryBlack,),
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: AppColors.primaryBlack,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -82,14 +113,23 @@ class _CourseInformationPageState extends BaseState<CourseInformationPage, Cours
           ],
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [classTab(), CourseTab()],
+      body: StreamBuilder<ClassResponse?>(
+        stream: bloc.classResponsseStream,
+        builder: (context, snapshot) {
+          var data = snapshot.data;
+          return TabBarView(
+            controller: _tabController,
+            children: [
+              classTab(data),
+              CourseTab(data?.course),
+            ],
+          );
+        }
       ),
     );
   }
 
-  Widget classTab() {
+  Widget classTab(ClassResponse? data) {
     return Padding(
       padding: const EdgeInsets.only(
         top: 14,
@@ -122,26 +162,34 @@ class _CourseInformationPageState extends BaseState<CourseInformationPage, Cours
                   child: InformationCard(
                     isList: false,
                     leading: localization.class_name,
-                    trailing: "TOEIC 650",
+                    trailing: data?.className??"",
                   ),
                 ),
                 InformationCard(
                   isList: false,
                   leading: localization.room,
-                  trailing: "Room 69",
+                  trailing: data?.room??"",
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: InformationCard(
                     isList: false,
                     leading: localization.start_date,
-                    trailing: "29-11-2021",
+                    trailing: data?.startDate,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: InformationCard(
+                    isList: false,
+                    leading: localization.start_date,
+                    trailing: data?.endDate,
                   ),
                 ),
                 InformationCard(
                   isList: true,
                   leading: localization.class_time,
-                  listTrailing: classTime,
+                  listTrailing: data?.classTimes,
                 ),
               ],
             ),
@@ -170,13 +218,39 @@ class _CourseInformationPageState extends BaseState<CourseInformationPage, Cours
                   child: InformationCard(
                     isList: false,
                     leading: localization.student,
-                    trailing: "18 (student)",
+                    trailing: "${data?.course?.max} (student)",
                   ),
                 ),
-                InformationCard(
-                  isList: true,
-                  leading: localization.lectures,
-                  listTrailing: lectureList,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        localization.lectures,
+                        style: TextStyle(
+                          color: AppColors.primaryBlack,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: List.generate(
+                          lectureList.length ?? 0,
+                              (index) => Text(
+                                lectureList[index],
+                            style: TextStyle(
+                              color: AppColors.primaryGay,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -186,7 +260,7 @@ class _CourseInformationPageState extends BaseState<CourseInformationPage, Cours
     );
   }
 
-  Widget CourseTab() {
+  Widget CourseTab(Course? course) {
     return Padding(
       padding: const EdgeInsets.only(
         top: 14,
@@ -218,26 +292,26 @@ class _CourseInformationPageState extends BaseState<CourseInformationPage, Cours
                   child: InformationCard(
                     isList: false,
                     leading: localization.course_name,
-                    trailing: "TOEIC 650",
+                    trailing: course?.courseName??"",
                   ),
                 ),
                 InformationCard(
                   isList: false,
                   leading: localization.fee,
-                  trailing: "6.000.000",
+                  trailing: course?.fee,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: InformationCard(
                     isList: false,
                     leading: localization.max_students,
-                    trailing: "20",
+                    trailing: course?.max.toString(),
                   ),
                 ),
                 InformationCard(
                   isList: false,
                   leading: localization.description,
-                  trailing: "Desciprtion TOEIC 500",
+                  trailing: course?.description,
                 ),
               ],
             ),
@@ -266,13 +340,13 @@ class _CourseInformationPageState extends BaseState<CourseInformationPage, Cours
                   child: InformationCard(
                     isList: false,
                     leading: localization.type_name,
-                    trailing: "TOEIC",
+                    trailing: course?.courseType?.typeName??"",
                   ),
                 ),
                 InformationCard(
                   isList: false,
                   leading: localization.description,
-                  trailing: "Desciption about TOEIC",
+                  trailing: course?.courseType?.description??"",
                 ),
               ],
             ),
@@ -301,13 +375,13 @@ class _CourseInformationPageState extends BaseState<CourseInformationPage, Cours
                   child: InformationCard(
                     isList: false,
                     leading: localization.level_name,
-                    trailing: "Pro",
+                    trailing: course?.level?.levelName,
                   ),
                 ),
                 InformationCard(
                   isList: false,
                   leading: localization.point,
-                  trailing: "500",
+                  trailing: course?.level?.point,
                 ),
                 SizedBox(
                   height: 5,
@@ -315,7 +389,7 @@ class _CourseInformationPageState extends BaseState<CourseInformationPage, Cours
                 InformationCard(
                   isList: false,
                   leading: localization.language,
-                  trailing: "English",
+                  trailing: course?.level?.language,
                 ),
               ],
             ),

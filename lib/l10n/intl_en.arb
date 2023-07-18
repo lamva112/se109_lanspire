@@ -42,5 +42,13 @@
     "code_can_not_be_empty":"code can't be empty",
     "password_is_not_valid": "password is not valid",
     "confirm_password_is_not_valid": "confirm password is not valid",
-    "code": "Code"
+    "code": "Code",
+    "personal_information": "personal information",
+    "exam_schedule": "Exam schedule",
+    "update": "Update",
+    "time_table": "Time table",
+    "grade": "Grade",
+    "exam_name": "Exam name",
+    "core": "Core",
+    "exam": "Exam"
 }

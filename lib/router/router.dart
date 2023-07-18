@@ -11,6 +11,9 @@ class Routes {
   static String get course => '/course';
   static String get courseInformation => '/course-information';
   static String get examSchedule => '/exam-schedule';
+  static String get timeTable => '/time_table';
+  static String get markSheet => '/mark-sheet';
+
   static getRoute(RouteSettings settings) {
     Widget widget;
     try {

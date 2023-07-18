@@ -37,6 +37,13 @@ class $AssetsImagesGen {
 class $AssetsImagesPngGen {
   const $AssetsImagesPngGen();
 
+  /// File path: assets/images/png/alarm.png
+  AssetGenImage get alarm => const AssetGenImage('assets/images/png/alarm.png');
+
+  /// File path: assets/images/png/approval.png
+  AssetGenImage get approval =>
+      const AssetGenImage('assets/images/png/approval.png');
+
   /// File path: assets/images/png/avatar.png
   AssetGenImage get avatar =>
       const AssetGenImage('assets/images/png/avatar.png');
@@ -45,26 +52,78 @@ class $AssetsImagesPngGen {
   AssetGenImage get background =>
       const AssetGenImage('assets/images/png/background.png');
 
+  /// File path: assets/images/png/birth_day.png
+  AssetGenImage get birthDay =>
+      const AssetGenImage('assets/images/png/birth_day.png');
+
+  /// File path: assets/images/png/calendar.png
+  AssetGenImage get calendar =>
+      const AssetGenImage('assets/images/png/calendar.png');
+
   /// File path: assets/images/png/class_room.png
   AssetGenImage get classRoom =>
       const AssetGenImage('assets/images/png/class_room.png');
 
+  /// File path: assets/images/png/clock-circular.png
+  AssetGenImage get clockCircular =>
+      const AssetGenImage('assets/images/png/clock-circular.png');
+
   /// File path: assets/images/png/clock.png
   AssetGenImage get clock => const AssetGenImage('assets/images/png/clock.png');
 
+  /// File path: assets/images/png/district.png
+  AssetGenImage get district =>
+      const AssetGenImage('assets/images/png/district.png');
+
+  /// File path: assets/images/png/docs.png
+  AssetGenImage get docs => const AssetGenImage('assets/images/png/docs.png');
+
+  /// File path: assets/images/png/email.png
+  AssetGenImage get email => const AssetGenImage('assets/images/png/email.png');
+
   /// File path: assets/images/png/exam.png
   AssetGenImage get exam => const AssetGenImage('assets/images/png/exam.png');
+
+  /// File path: assets/images/png/format.png
+  AssetGenImage get format =>
+      const AssetGenImage('assets/images/png/format.png');
+
+  /// File path: assets/images/png/grade.png
+  AssetGenImage get grade => const AssetGenImage('assets/images/png/grade.png');
+
+  /// File path: assets/images/png/graduate.png
+  AssetGenImage get graduate =>
+      const AssetGenImage('assets/images/png/graduate.png');
 
   /// File path: assets/images/png/invisible.png
   AssetGenImage get invisible =>
       const AssetGenImage('assets/images/png/invisible.png');
 
+  /// File path: assets/images/png/location.png
+  AssetGenImage get location =>
+      const AssetGenImage('assets/images/png/location.png');
+
   /// File path: assets/images/png/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/png/logo.png');
+
+  /// File path: assets/images/png/pencil.png
+  AssetGenImage get pencil =>
+      const AssetGenImage('assets/images/png/pencil.png');
+
+  /// File path: assets/images/png/phone_number.png
+  AssetGenImage get phoneNumber =>
+      const AssetGenImage('assets/images/png/phone_number.png');
+
+  /// File path: assets/images/png/province.png
+  AssetGenImage get province =>
+      const AssetGenImage('assets/images/png/province.png');
 
   /// File path: assets/images/png/reset_background.png
   AssetGenImage get resetBackground =>
       const AssetGenImage('assets/images/png/reset_background.png');
+
+  /// File path: assets/images/png/task.png
+  AssetGenImage get task => const AssetGenImage('assets/images/png/task.png');
 
   /// File path: assets/images/png/team.png
   AssetGenImage get team => const AssetGenImage('assets/images/png/team.png');
@@ -81,14 +140,30 @@ class $AssetsImagesPngGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        alarm,
+        approval,
         avatar,
         background,
+        birthDay,
+        calendar,
         classRoom,
+        clockCircular,
         clock,
+        district,
+        docs,
+        email,
         exam,
+        format,
+        grade,
+        graduate,
         invisible,
+        location,
         logo,
+        pencil,
+        phoneNumber,
+        province,
         resetBackground,
+        task,
         team,
         user,
         visible,

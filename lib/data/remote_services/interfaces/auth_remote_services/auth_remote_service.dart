@@ -1,4 +1,5 @@
 import '../../../data.dart';
+import '../../../responses/user_info_response.dart';
 
 abstract class IAuthRemoteService implements IFacebookAuthRemoteService, IGoogleAuthRemoteService {
   Future<void> signInWithPhoneNumber({required String phoneNumber});
@@ -14,4 +15,6 @@ abstract class IAuthRemoteService implements IFacebookAuthRemoteService, IGoogle
   Future<void> resetPassword({required String newPassword, required String confirmedPassword});
 
   AuthResponse get firebaseCurrentUser;
+
+  Future<UserInfoResponse?> signInWithEmail({required String email, required String password});
 }

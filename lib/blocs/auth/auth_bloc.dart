@@ -27,6 +27,28 @@ class AuthBloc extends BaseBloc<AuthState> {
 
   Stream<AuthType?> get authTypeStream => stateStream.map((event) => event.authType);
 
+  Stream<UserInfoResponse?> get userInforStream => stateStream.map((event) => event.userInfoResponse);
+
+  Future<void> signInWithEmailAndPassword({required String email,required String password}) async {
+    emitLoading(true);
+    authRepository.signInWithEmailAndPassword(email: email,password: password).then((value) {
+      value.fold(
+            (failure) {
+          emit(AuthState(state: state, error: failure.toString()));
+        },
+            (data) {
+              emit(AuthState(userInfoResponse: data));
+            },
+      );
+    }).catchError((err) {
+      emit(AuthState(state: state, error: err));
+    }).whenComplete(() => emitLoading(false));
+  }
+
+  Future<bool> saveToken(String token){
+    return sharedPreferencesRepo.changeToken(token);
+  }
+
   /// Check if user signed in
   void checkIsUserSignedIn() async {
     /// TODO: reverse when having real data
@@ -52,25 +74,6 @@ class AuthBloc extends BaseBloc<AuthState> {
     }
   }
 
-  void getSignedInUserData({
-    bool signedInWithPhone = false,
-    bool signedInWithFb = false,
-    bool signedInWithGoogle = false,
-  }) async {
-    if (signedInWithPhone) {
-      var res = await userRepository.getUserInfo();
-
-      res.fold((failure) {
-        emit(AuthState(state: state, error: failure.toString()));
-      }, (data) {
-        emit(AuthState(state: state, authResponse: AuthResponse(user: data?.user)));
-      });
-    } else if (signedInWithFb) {
-      getFacebookUserData();
-    } else if (signedInWithGoogle) {
-      await getCurrentGoogleAccount;
-    }
-  }
 
   /// Auth handler methods
   Future<void> signInWithPhoneNumber({required String phoneNumber}) async {

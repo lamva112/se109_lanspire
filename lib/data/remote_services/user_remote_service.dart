@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:get_it/get_it.dart';
 import 'package:se109_lanspire/data/responses/user_info_response.dart';
 
+import '../../core/core.dart';
 import '../../enums.dart';
 
 import '../data.dart';
@@ -36,46 +40,24 @@ var userPaymentMethods = {
 };
 
 class UserRemoteService extends IUserRemoteService {
+  late final INetworkUtility _networkUtility;
+
+  UserRemoteService() : _networkUtility = GetIt.I.get<INetworkUtility>(instanceName: NetworkConstant.authorizationDomain);
   @override
-  Future<UserInfoResponse> getUserInfo() async {
-    return UserInfoResponse.fromJson(userData);
+  Future<UserModel?> getUserInfo({required String userId}) async {
+    Map<String, dynamic> data = {};
+    try {
+      final response = await _networkUtility.request('http://192.168.165.30:8080/api/users/$userId', Method.GET);
+      if(response.statusCode == 200){
+        data = json.decode(response.data) as Map<String, dynamic>;
+      }else{
+        print(response.statusCode);
+        print("thử lại đi nha");
+      }
+    }catch (error) {
+      print('Error: $error');
+    }
+    return UserModel.fromJson(data);
   }
 
-  @override
-  Future<UserInfoResponse> updateUserInfo({
-    Map<String, dynamic>? setting,
-    String? name,
-    Map<String, dynamic>? image,
-    String? phoneNumber,
-    String? email,
-    bool? isPhoneNumberVerified,
-    String? birthDay,
-    String? gender,
-    String? country,
-  }) async {
-    if (name != null) {
-      userData['user']?['name'] = name;
-    }
-    if (birthDay != null) {
-      userData['user']?['birthDay'] = birthDay;
-    }
-    if (gender != null) {
-      userData['user']?['gender'] = gender;
-    }
-    if(country != null){
-      userData['user']?['country'] = country;
-    }
-    if(phoneNumber != null){
-      userData['user']?['phoneNumber'] = phoneNumber;
-    }
-    if(email != null){
-      userData['user']?['email'] = email;
-    }
-    return UserInfoResponse.fromJson(userData);
-  }
-
-  @override
-  Future<UserInfoResponse> getUserPaymentMethods() async {
-    return UserInfoResponse.fromJson(userPaymentMethods);
-  }
 }

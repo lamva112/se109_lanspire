@@ -2,21 +2,24 @@ import '../data.dart';
 
 class UserInfoResponse {
   UserModel? user;
+  String? accessToken;
+  String? refreshToken;
 
-  UserInfoResponse({this.user});
+  UserInfoResponse({this.user, this.accessToken, this.refreshToken});
 
   UserInfoResponse.fromJson(Map<String, dynamic> json) {
-    if (json['user'] != null) {
-      user = UserModel.fromJson(Map.from(json['user']));
-    }
+    user = json['user'] != null ?  UserModel.fromJson(json['user']) : null;
+    accessToken = json['accessToken'];
+    refreshToken = json['refreshToken'];
   }
 
   Map<String, dynamic> toJson() {
-    var data = <String, dynamic>{};
-    if (user != null) {
-      data['user'] = user!.toJson();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    if (this.user != null) {
+      data['user'] = this.user!.toJson();
     }
-
+    data['accessToken'] = this.accessToken;
+    data['refreshToken'] = this.refreshToken;
     return data;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:se109_lanspire/utils/app_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../enums.dart';

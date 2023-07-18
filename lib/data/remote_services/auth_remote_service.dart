@@ -1,13 +1,20 @@
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import '../../constants.dart';
+import '../../core/core.dart';
 import '../data.dart';
 
 class AuthRemoteService implements IAuthRemoteService {
   FacebookAuth get _fbInstance => FacebookAuth.instance;
   GoogleSignIn _googleInstance = GoogleSignIn();
+
+
+  late final INetworkUtility _networkUtility;
+
+  AuthRemoteService() : _networkUtility = GetIt.I.get<INetworkUtility>(instanceName: NetworkConstant.authorizationDomain);
 
   /// Auth handler methods
   @override
@@ -136,4 +143,39 @@ class AuthRemoteService implements IAuthRemoteService {
 
   @override
   AuthResponse get firebaseCurrentUser => AuthResponse(firebaseUser: FirebaseAuth.instance.currentUser);
+
+  @override
+  Future<UserInfoResponse?> signInWithEmail({required String email, required String password}) async {
+    final response = await _networkUtility.request(
+      'http://192.168.165.30:8080/api/auth/signin',
+      Method.POST,
+      data: {
+        'user': {
+          'username': email,
+          'password': password,
+        },
+      },
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        contentType: Headers.jsonContentType,
+        responseType: ResponseType.json,
+      ),
+    );
+
+    Map<String, dynamic> data = {};
+
+    if(response.statusCode == 200){
+      print(response.data);
+      data = response.data;
+
+    }else{
+      print(response.statusCode);
+      print("thử lại đi nha");
+    }
+
+    return UserInfoResponse.fromJson(data);
+  }
 }

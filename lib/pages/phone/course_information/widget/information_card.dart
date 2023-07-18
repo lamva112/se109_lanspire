@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../../../data/models/class_time.dart';
 import '../../../../resources/colors.dart';
 
 class InformationCard extends StatelessWidget {
   final String? leading;
   final String? trailing;
-  final List<String>? listTrailing;
+  final List<ClassTimes>? listTrailing;
   final bool isList;
 
   const InformationCard({
@@ -46,7 +47,7 @@ class InformationCard extends StatelessWidget {
                   children: List.generate(
                     listTrailing?.length ?? 0,
                     (index) => Text(
-                      listTrailing?[index] ?? "",
+                      "${listTrailing?[index].timeFrame?.startingTime?.substring(0, listTrailing?[index].timeFrame?.startingTime?.length ?? 0 - 3) ?? ""} - ${listTrailing?[index].timeFrame?.endingTime?.substring(0, listTrailing?[index].timeFrame?.endingTime?.length ?? 0 - 3)} | ${getDayOfWeek(listTrailing?[index].dayOfWeek ?? 1)}",
                       style: TextStyle(
                         color: AppColors.primaryGay,
                         fontSize: 15,
@@ -59,4 +60,24 @@ class InformationCard extends StatelessWidget {
       ],
     );
   }
+}
+
+String getDayOfWeek(int day) {
+  switch (day) {
+    case 1:
+      return "Mon";
+    case 2:
+      return "Tue";
+    case 3:
+      return "Wed";
+    case 4:
+      return "Thu";
+    case 5:
+      return "Fri";
+    case 6:
+      return "Sat";
+    case 7:
+      return "Sun";
+  }
+  return "Mon";
 }

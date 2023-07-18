@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:se109_lanspire/blocs/auth/auth.dart';
+import '../../../blocs/auth/auth.dart';
 import '../../../core/base/base.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../resources/resources.dart';

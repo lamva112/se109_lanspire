@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../data/data.dart';
 import '../../../resources/colors.dart';
 import '../../../core/base/base.dart';
 import '../../../blocs/blocs.dart';
@@ -28,18 +29,28 @@ class _CoursePageState extends BaseState<CoursePage, CourseBloc> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ...List.generate(
-              2,
-              (index) => CourseCard(
-                onTap: (){
-                  Navigator.pushNamed(context, Routes.courseInformation);
-                },
-              ),
-            ),
-          ],
-        ),
+        child: StreamBuilder<List<Classes>?>(
+            stream: bloc.classStream,
+            builder: (context, snapshot) {
+              var listClass = snapshot.data;
+              return Column(
+                children: [
+                  ...List.generate(
+                    listClass?.length ?? 0,
+                    (index) => CourseCard(
+                      classes: listClass?[index],
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.courseInformation,
+                          arguments: listClass?[index].idClass,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }),
       ),
     );
   }
